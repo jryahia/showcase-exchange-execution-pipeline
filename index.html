@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exchange Execution Pipeline | Case Study</title>
+<meta name="description" content="Event-driven execution and monitoring system for crypto derivatives exchanges: ingest, validate, apply risk controls, execute through exchange APIs, and report every step.">
+<style>
+:root{--bg:#0d1117;--card:#161b22;--line:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#8b5cf6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 "Segoe UI",Helvetica,Arial,sans-serif}
+main{max-width:1040px;margin:0 auto;padding:56px 16px 80px}
+a{color:var(--acc)}h1{font-size:clamp(30px,5vw,46px);line-height:1.15;margin:0 0 12px}
+h2{font-size:22px;margin:56px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.kicker{color:var(--acc);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:13px}
+.lead{font-size:19px;color:var(--mut);max-width:760px}
+.note{border:1px solid var(--line);border-left:4px solid var(--acc);background:var(--card);padding:14px 18px;border-radius:8px;margin:28px 0}
+.hero{width:100%;border-radius:12px;border:1px solid var(--line);margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0;list-style:none}
+.chips li{border:1px solid var(--line);background:var(--card);padding:5px 12px;border-radius:999px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:0;list-style:none}
+.grid li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+ol li{margin:6px 0}.arch{width:100%;height:auto;border-radius:12px;border:1px solid var(--line)}
+figure{margin:0 0 28px}figure img{width:100%;border-radius:10px;border:1px solid var(--line)}
+figcaption{color:var(--mut);font-size:14px;margin-top:6px}
+footer{margin-top:64px;color:var(--mut);font-size:14px;border-top:1px solid var(--line);padding-top:20px}
+</style></head><body><main>
+<div class="kicker">Case study &middot; Private project</div>
+<h1>Exchange Execution Pipeline</h1>
+<p class="lead">Event-driven execution and monitoring system for crypto derivatives exchanges: ingest, validate, apply risk controls, execute through exchange APIs, and report every step.</p>
+<div class="note"><strong>This is a proprietary project. Source code is private. This page describes the system&#x27;s architecture and capabilities only.</strong></div>
+<h2>Problem it solves</h2><p>Acting on time-sensitive market events by hand is slow and error-prone: messages arrive in bursts, duplicates slip through, order parameters have to match each exchange&#x27;s precision rules, and nothing is logged. This system turns that into a single always-on service with validation, risk checks, exchange-correct order construction, and an audit trail, plus tooling to deploy and update it on a remote server.</p>
+<h2>Architecture</h2><img class="arch" src="assets/architecture.svg" alt="Architecture diagram"><ol><li>Events stream in over a persistent connection, with no polling delay, and are normalized into one internal format.</li><li>A de-duplication window drops repeated events before they reach execution.</li><li>Each candidate order passes pre-trade risk controls and is validated against live market data and the exchange&#x27;s tick-size and lot-size rules.</li><li>The exchange adapter places and manages orders through the exchange API, confirming filled quantities from order history.</li><li>Every action is reported to the operator on Telegram and WhatsApp and written to an error log and trade journal.</li></ol>
+<h2>Key features</h2><ul class="grid"><li>Event-driven ingestion from multiple real-time sources</li><li>Exchange adapters for Binance Futures and Bybit behind one interface</li><li>Pre-trade risk controls and exchange-precision validation</li><li>Position management after entry, including partial closes</li><li>Single-instance lock, graceful shutdown and timestamped error logging</li><li>SSH deployment tooling that provisions and updates the service on a VPS</li></ul>
+<h2>Tech stack</h2><ul class="chips"><li>Python</li><li>asyncio</li><li>Telethon</li><li>ccxt</li><li>pybit</li><li>Paramiko</li><li>Linux VPS</li></ul>
+<h2>What it does in practice</h2><ul><li>Replaces manual order entry with a monitored, logged pipeline that runs unattended on a server.</li><li>Gives the operator a live feed of every decision and order, and a record to review afterwards.</li></ul>
+<p class="note">Not financial advice. Proprietary project, source code private. No performance figures are published.</p>
+<footer>Built by <a href="https://github.com/jryahia">Yahya Jarray</a> &middot;
+<a href="mailto:yahiajarray43@gmail.com">yahiajarray43@gmail.com</a> &middot;
+<a href="https://github.com/jryahia/showcase-exchange-execution-pipeline">Repository</a><br>This repository contains no source code. It is a case study for a proprietary project. &copy; Yahya Jarray.</footer>
+</main></body></html>
